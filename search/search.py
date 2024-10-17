@@ -92,10 +92,10 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     visited = set()
-    stack = util.Stack()
-    stack.push((problem.getStartState(), [])) # (state, direction_to_reach_state)
-    while not stack.isEmpty():
-        cur_state, directions = stack.pop()
+    fringe = util.Stack()
+    fringe.push((problem.getStartState(), [])) # (state, direction_to_reach_state)
+    while not fringe.isEmpty():
+        cur_state, directions = fringe.pop()
 
         if cur_state in visited: continue
         visited.add(cur_state)
@@ -105,15 +105,31 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
 
         for successor, action, _ in problem.getSuccessors(cur_state):
             if successor not in visited:
-                stack.push((successor, directions + [action]))
+                fringe.push((successor, directions + [action]))
 
     # Return empty list if no path found
     return directions
 
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visited = set()
+    fringe = util.Queue()
+    fringe.push((problem.getStartState(), [])) # (state, direction_to_reach_state)
+    while not fringe.isEmpty():
+        cur_state, directions = fringe.pop()
+
+        if cur_state in visited: continue
+        visited.add(cur_state)
+
+        if problem.isGoalState(cur_state):
+            return directions
+
+        for successor, action, _ in problem.getSuccessors(cur_state):
+            if successor not in visited:
+                fringe.push((successor, directions + [action]))
+
+    # Return empty list if no path found
+    return directions
 
 def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
     """Search the node of least total cost first."""
