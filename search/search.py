@@ -17,9 +17,11 @@ In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
 
+from typing import List
+
 import util
 from game import Directions
-from typing import List
+
 
 class SearchProblem:
     """
@@ -89,8 +91,24 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visited = set()
+    stack = util.Stack()
+    stack.push((problem.getStartState(), [])) # (state, direction_to_reach_state)
+    while not stack.isEmpty():
+        cur_state, directions = stack.pop()
+
+        if cur_state in visited: continue
+        visited.add(cur_state)
+
+        if problem.isGoalState(cur_state):
+            return directions
+
+        for successor, action, _ in problem.getSuccessors(cur_state):
+            if successor not in visited:
+                stack.push((successor, directions + [action]))
+
+    # Return empty list if no path found
+    return directions
 
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     """Search the shallowest nodes in the search tree first."""

@@ -34,14 +34,15 @@ description for details.
 Good luck and happy searching!
 """
 
-from typing import List, Tuple, Any
-from game import Directions
-from game import Agent
-from game import Actions
-import util
 import time
-import search
+from typing import Any, List, Tuple
+
 import pacman
+import util
+from game import Actions, Agent, Directions
+
+import search
+
 
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
