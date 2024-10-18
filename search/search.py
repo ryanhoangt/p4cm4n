@@ -135,7 +135,7 @@ def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
     """Search the node of least total cost first."""
     visited = set()
     fringe = util.PriorityQueue()
-    fringe.push((problem.getStartState(), [], 0), 0) # (state, direction_to_reach_state)
+    fringe.push((problem.getStartState(), [], 0), 0) # (state, direction_to_reach_state, acc_cost)
     while not fringe.isEmpty():
         cur_state, directions, acc_cost = fringe.pop()
 
@@ -161,8 +161,32 @@ def nullHeuristic(state, problem=None) -> float:
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic) -> List[Directions]:
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    best_cost = {}  # Dictionary to store the best cost to each state, this is to deal with "inconsistent" heuristics
+    fringe = util.PriorityQueue()
+    
+    # Initialize with the start state
+    initial_state = problem.getStartState()
+    initial_heuristic = heuristic(initial_state, problem)
+    fringe.push((initial_state, [], 0), 0 + initial_heuristic) # ((state, path, accumulated_cost)
+
+    best_cost[initial_state] = 0
+
+    while not fringe.isEmpty():
+        cur_state, directions, acc_cost = fringe.pop()
+
+        # If the goal is found, return the path to it
+        if problem.isGoalState(cur_state):
+            return directions
+
+        # Explore successors
+        for successor, action, step_cost in problem.getSuccessors(cur_state):
+            new_cost = acc_cost + step_cost
+            if successor not in best_cost or new_cost < best_cost[successor]:
+                best_cost[successor] = new_cost
+                f_value = new_cost + heuristic(successor, problem)
+                fringe.push((successor, directions + [action], new_cost), f_value)
+
+    return []
 
 # Abbreviations
 bfs = breadthFirstSearch
