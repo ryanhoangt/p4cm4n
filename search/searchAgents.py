@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -368,9 +368,13 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    position, corners_left = state
+    # ===== 1. A simple heuristic is the minimum Manhattan distance to each of the corners left =====
+    estimate_corner_distances = [util.manhattanDistance(position, corner) for corner in corners_left]
 
+    # ===== 2. TODO: A better heuristic is yet to be figured out =====
+    
+    return min(estimate_corner_distances, default=0)
 
 
 class AStarCornersAgent(SearchAgent):
