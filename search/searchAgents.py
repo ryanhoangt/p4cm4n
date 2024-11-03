@@ -463,8 +463,13 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    food_positions = foodGrid.asList()
+    foodPositions = foodGrid.asList()
     
+    # Use a similar heuristic to the cornersHeuristic
+    estimate_food_distances = [util.manhattanDistance(position, food) for food in foodPositions]
+    min_estimate_food_distance = min(estimate_food_distances, default=0)
+
+    return min_estimate_food_distance + len(foodPositions)
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
