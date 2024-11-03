@@ -371,11 +371,11 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     position, corners_left = state
     # ===== 1. A simple heuristic is the minimum Manhattan distance to each of the corners left =====
     estimate_corner_distances = [util.manhattanDistance(position, corner) for corner in corners_left]
+    # return min(estimate_corner_distances, default=0)
 
-    # ===== 2. TODO: A better heuristic is yet to be figured out =====
-    
-    return min(estimate_corner_distances, default=0)
-
+    # ===== 2. A better heuristic is to plus min(width, height) * num_corners_left =====
+    # plus the width and height of the maze
+    return min(estimate_corner_distances, default=0) + min(walls.width-3, walls.height-3) * max(len(corners_left) - 1, 0)
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -463,9 +463,8 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
-
+    food_positions = foodGrid.asList()
+    
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
